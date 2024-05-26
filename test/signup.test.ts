@@ -42,8 +42,9 @@ test("Return error when CPF is invalid", async function () {
     cpf: "09",
     isPassenger: true,
   };
-  const result = await signup(input);
-  expect(result).toBe(-1);
+  await expect(() => signup(input)).rejects.toThrow(
+    new Error("CPF is invalid")
+  );
 });
 
 test("Return error when email is invalid", async function () {
@@ -53,8 +54,9 @@ test("Return error when email is invalid", async function () {
     cpf: "123.456.789-09",
     isPassenger: true,
   };
-  const result = await signup(input);
-  expect(result).toBe(-2);
+  await expect(() => signup(input)).rejects.toThrow(
+    new Error("Email is invalid")
+  );
 });
 
 test("Return error when NAME is invalid", async function () {
@@ -64,8 +66,9 @@ test("Return error when NAME is invalid", async function () {
     cpf: "123.456.789-09",
     isPassenger: true,
   };
-  const result = await signup(input);
-  expect(result).toBe(-3);
+  await expect(() => signup(input)).rejects.toThrow(
+    new Error("Name is invalid")
+  );
 });
 
 test("Return error when user already exists", async function () {
@@ -76,9 +79,10 @@ test("Return error when user already exists", async function () {
     cpf: "123.456.789-09",
     isPassenger: true,
   };
-  const result = await signup(input);
-  const result2 = await signup(input);
-  expect(result2).toBe(-4);
+  await signup(input);
+  await expect(() => signup(input)).rejects.toThrow(
+    new Error("Email already in use")
+  );
 });
 
 test("Return error when CAR_PLATE is invalid", async function () {
@@ -89,6 +93,7 @@ test("Return error when CAR_PLATE is invalid", async function () {
     isDriver: true,
     carPlate: "1234",
   };
-  const result = await signup(input);
-  expect(result).toBe(-5);
+  await expect(() => signup(input)).rejects.toThrow(
+    new Error("Car plate is invalid")
+  );
 });
