@@ -1,15 +1,13 @@
-import pgp from "pg-promise";
+import { AccountDAO } from "./AccountDAO";
 
-export async function getAccount(accountId: string): Promise<any> {
-  const connection = pgp()("postgres://postgres:123456@localhost:5432/app");
-  try {
-    const [acc] = await connection.query(
-      "select * from cccat15.account where account_id = $1",
-      [accountId]
-    );
+export default class GetAccount {
+  constructor(readonly accountDAO: AccountDAO) {}
 
-    return acc;
-  } finally {
-    await connection.$pool.end();
+  async execute(accountId: string) {
+    const account = await this.accountDAO.getById(accountId);
+    // account.is_passenger = account.isPassenger;
+    // account.is_driver = account.isDriver;
+    // account.car_plate = account.carPlate;
+    return account;
   }
 }
